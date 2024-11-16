@@ -7,7 +7,8 @@ const pool = new Pool({
     host: 'localhost',
     database: 'ecommerce',
     password: 'admin',
-    port: 5432,
+    port: 5432
+
 });
 
 
@@ -29,14 +30,14 @@ const produtos = [
 
 
 
-app.get('/ab?cd', (req, res) => {
-    res.send('ab+cd')
+app.get('/abcd?', (req, res) => {
+    res.send('pegou')
   })
 app.get('/api/produto', (req, res) => { 
     res.status(200).json(produtos)
 })
 
-app.get('/api/produto/:id', (req, res) => { 
+app.get('/api/produto/id', (req, res) => { 
     const { id }  = req.params 
     const produto = produtos[id-1]
     
@@ -50,7 +51,7 @@ app.get('/api/produto/:id', (req, res) => {
 })
 
 
-app.put('/api/produto/:id', (req, res) => { 
+app.put('/api/produto/id:', (req, res) => { 
     const { nome, preco  } = req.body; 
     const { id } = req.params
 
@@ -79,16 +80,16 @@ app.put('/api/produto/:id', (req, res) => {
 app.post('/registro', (req, res) => { 
     const { email, senha } = req.body;
     
-    // const sql = 'INSERT INTO usuarios (email, senha, data_criacao) VALUES ( $1, $2, NOW() )';
-
-    // pool.query(sql, [email, senha], (err, result) => {
-    //     if (err) {
-    //         console.error(err.message);
-    //         res.status(500).send('Server error');
-    //         return;
-    //     }
-    //     res.status(201).send('User registered successfully');
-    // });
+    const sql = 'INSERT INTO usuarios (email, senha, data_criacao) VALUES ( $1, $2, NOW() )';
+    
+    pool.query(sql, [email, senha], (err, result) => {
+        if (err) {
+            console.error(err.message);
+            res.status(500).send('Server error');
+            return;
+        }
+        res.status(201).send('User registered successfully');
+    });
 
     res.status(200).json({email, senha});
 });
