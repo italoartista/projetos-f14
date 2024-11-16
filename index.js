@@ -18,27 +18,83 @@ app.use(express.json());  // parse do json
 
 let id = 0;
 
-const produtos = [];  // mock do banco 
+const produtos = [
+    { id: 1, nome: "Notebook Gamer", preco: 5000 },
+    { id: 2, nome: "Smartphone", preco: 2000 },
+    { id: 3, nome: "Tablet", preco: 1500 },
+    { id: 4, nome: "Monitor", preco: 800 },
+    { id: 5, nome: "Teclado Mecânico", preco: 300 }
+];  // mock do banco
 
 
-//     const { email, senha } = req.body;
+
+
+app.get('/ab?cd', (req, res) => {
+    res.send('ab+cd')
+  })
+app.get('/api/produto', (req, res) => { 
+    res.status(200).json(produtos)
+})
+
+app.get('/api/produto/:id', (req, res) => { 
+    const { id }  = req.params 
+    const produto = produtos[id-1]
     
-//     const sql = 'INSERT INTO usuarios (email, senha, data_criacao) VALUES ( $1, $2, NOW() )';
+    console.log(produto)
 
-//     pool.query(sql, [email, senha], (err, result) => {
-//         if (err) {
-//             console.error(err.message);
-//             res.status(500).send('Server error');
-//             return;
-//         }
-//         res.status(201).send('User registered successfully');
-//     });
+    if(produto)
+        res.status(200).json(produto)
+    else 
+        res.status(404).send("Produto não existe.")
 
-//     res.status(200).json({email, senha});
-// });
+})
+
+
+app.put('/api/produto/:id', (req, res) => { 
+    const { nome, preco  } = req.body; 
+    const { id } = req.params
+
+    const produto = { 
+        id,
+        nome, 
+        preco
+    }
+
+
+    
+    if(produtos[id-1]) {
+        produtos[id-1] = produto 
+        res.status(200).json({msg: "Produto foi atualizado", produto})
+
+    } else { 
+        res.status(404).send('Não existe produto para ser atualizado')
+    } 
+        
+
+    
+
+})
+
+
+app.post('/registro', (req, res) => { 
+    const { email, senha } = req.body;
+    
+    // const sql = 'INSERT INTO usuarios (email, senha, data_criacao) VALUES ( $1, $2, NOW() )';
+
+    // pool.query(sql, [email, senha], (err, result) => {
+    //     if (err) {
+    //         console.error(err.message);
+    //         res.status(500).send('Server error');
+    //         return;
+    //     }
+    //     res.status(201).send('User registered successfully');
+    // });
+
+    res.status(200).json({email, senha});
+});
 
 app.post('/produto', (req, res) => {
-    const produtoBody = req.body
+    const produtoBody = req.body // retorna um objeto
 
     id++; 
 
@@ -63,4 +119,3 @@ app.post('/produto', (req, res) => {
 
 app.listen(3000, () =>  console.log('listening on port  3000'));
 
-// app.post('/registro', (req, res) => { 
