@@ -272,5 +272,3 @@
         value: string;
     }
     ```
-
-Este é um modelo modular e extensível, pronto para ser usado em projetos reais. Se precisar de um diagrama UML ou refinar algo, é só pedir!
